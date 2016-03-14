@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:hadoop="http://www.springframework.org/schema/hadoop"
+       xmlns:hdp="http://www.springframework.org/schema/hadoop"
+       xsi:schemaLocation="http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.springapp"/>
+
+
+    <bean id="helloWorld" class="com.springapp.base.hello.HelloWorld"></bean>
+    <bean id="helloWorld2" class="com.springapp.base.hello.HelloWorld" p:name="xxx"/>
+    <bean id="person" class="com.springapp.base.spEL.Person">
+        <property name="city" value="#{'beijing'}"/>
+    </bean>
+    <hdp:configuration/>
+    <bean id="hiveDriver" class="org.apache.hive.jdbc.HiveDriver"/>
+    <bean id="hiveDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+
+        <constructor-arg name="driver" ref="hiveDriver"/>
+        <constructor-arg name="url" value="jdbc:hive2://192.168.232.141:10000"/>
+    </bean>
+    <hadoop:hive-client-factory hive-data-source-ref="hiveDataSource"/>
+    <hadoop:hive-template id="hiveTemplate"/>
+    <bean id="someBean" class="com.springapp.hive.SomeClass" p:hiveTemplate-ref="hiveTemplate"/>
+
+</beans>
